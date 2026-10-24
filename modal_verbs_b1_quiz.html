@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Verbs B1 English Quiz</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandDarkBlue: '#071527',
+                        brandBlueCard: '#0d213a',
+                        brandRed: '#e50914',
+                        brandRedHover: '#b80710',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Red Scrollbar for Question Box */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #e50914;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #b80710;
+        }
+        /* Firefox scrollbar support */
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #e50914 #f1f5f9;
+        }
+    </style>
+</head>
+<body class="bg-brandDarkBlue min-h-screen text-slate-800 flex flex-col items-center p-3 sm:p-6 font-sans antialiased">
+
+    <!-- Top Logo Container -->
+    <div class="mb-6 flex justify-center items-center">
+        <div class="w-32 h-32 sm:w-36 sm:h-36 bg-brandDarkBlue border-4 border-brandRed rounded-lg p-2 shadow-xl flex items-center justify-center overflow-hidden">
+            <img src="master.png" alt="Master Logo" class="max-w-full max-h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-white font-bold text-center text-xl\'>MASTER</div>'">
+        </div>
+    </div>
+
+    <!-- Main Quiz Card -->
+    <main class="w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-slate-200 min-h-[580px] my-auto">
+        
+        <!-- Header & Progress -->
+        <header class="bg-slate-900 text-white p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-center gap-3 border-b-2 border-brandRed">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                    <span>Modal Verbs Quiz</span>
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-brandRed text-white">B1 CEFR</span>
+                </h1>
+                <p class="text-xs text-slate-300 mt-1">Mastering: <strong class="text-white">can, could, should, must, may, might</strong></p>
+            </div>
+            <div class="text-right flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto">
+                <span id="quiz-status-text" class="text-sm font-bold text-slate-200">Question 1 of 10</span>
+                <span id="score-badge" class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md font-mono mt-1 border border-slate-700">Target Score: 10.0</span>
+            </div>
+        </header>
+
+        <!-- Navigation Bar (Question Numbers) -->
+        <nav aria-label="Question Navigation" class="bg-slate-100 p-3 border-b border-slate-200">
+            <div id="question-nav-container" class="flex flex-wrap items-center justify-center gap-2">
+                <!-- Buttons 1-10 will be dynamically generated here -->
+            </div>
+        </nav>
+
+        <!-- Scrollable Content Box -->
+        <div id="quiz-content-area" class="p-4 sm:p-6 custom-scrollbar overflow-y-auto max-h-[500px] flex-grow">
+            
+            <!-- Question Box -->
+            <div id="question-card" class="block">
+                <!-- Context / Dialogue Header -->
+                <div class="mb-4 bg-slate-50 border-l-4 border-brandRed p-4 rounded-r-lg shadow-sm">
+                    <span id="question-context-title" class="text-xs font-bold uppercase tracking-wider text-brandRed block mb-1">Context Dialogue</span>
+                    <div id="question-text" class="text-base sm:text-lg font-medium text-slate-900 leading-relaxed">
+                        <!-- Question Text Gaps Here -->
+                    </div>
+                </div>
+
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Select the correct modal verb to complete the gap:</p>
+
+                <!-- 5 Options List -->
+                <div id="options-container" class="space-y-2.5 mb-6">
+                    <!-- Options A-E rendered here dynamically -->
+                </div>
+
+                <!-- Instant Feedback Area -->
+                <div id="feedback-container" class="hidden p-4 rounded-xl border-2 transition-all duration-300">
+                    <div id="feedback-header" class="font-bold text-base mb-1 flex items-center gap-2"></div>
+                    <div id="feedback-text" class="text-sm leading-relaxed text-slate-700"></div>
+                </div>
+            </div>
+
+            <!-- Summary / Report Screen (Hidden Initially) -->
+            <div id="report-card" class="hidden space-y-6">
+                <div class="text-center py-4 bg-slate-50 rounded-2xl border border-slate-200 p-6">
+                    <h2 class="text-2xl font-black text-slate-900 mb-1">Quiz Completed!</h2>
+                    <p class="text-sm text-slate-600 mb-4">Here is your performance summary for Modal Verbs B1.</p>
+                    
+                    <div class="inline-flex flex-col items-center justify-center p-6 bg-white rounded-full border-4 border-brandRed shadow-lg my-2 min-w-[150px] min-h-[150px]">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Final Score</span>
+                        <span id="final-grade" class="text-4xl font-black text-brandRed">0.0 / 10</span>
+                        <span id="final-percentage" class="text-xs font-bold text-slate-600 mt-0.5">0%</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 text-left">
+                        <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg text-center">
+                            <span class="text-xs text-emerald-700 font-semibold uppercase block">Correct Answers</span>
+                            <span id="stat-correct" class="text-2xl font-extrabold text-emerald-800">0</span>
+                        </div>
+                        <div class="bg-rose-50 border border-rose-200 p-3 rounded-lg text-center">
+                            <span class="text-xs text-rose-700 font-semibold uppercase block">Incorrect Answers</span>
+                            <span id="stat-incorrect" class="text-2xl font-extrabold text-rose-800">0</span>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 bg-slate-100 border border-slate-200 p-3 rounded-lg text-center">
+                            <span class="text-xs text-slate-600 font-semibold uppercase block">Accuracy</span>
+                            <span id="stat-accuracy" class="text-2xl font-extrabold text-slate-800">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Breakdown List -->
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 border-b pb-2">Question Breakdown</h3>
+                    <div id="breakdown-list" class="space-y-3">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer Control Buttons -->
+        <footer class="bg-slate-50 p-4 border-t border-slate-200 flex items-center justify-between gap-2">
+            <button id="btn-prev" onclick="navigateQuestion(-1)" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2.5 px-4 sm:px-5 rounded-lg text-sm transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            
+            <div class="flex items-center gap-2">
+                <button id="btn-check" onclick="checkCurrentAnswer()" class="bg-brandRed hover:bg-brandRedHover text-white font-bold py-2.5 px-5 sm:px-6 rounded-lg text-sm transition-all shadow-md active:scale-95">
+                    Check Answer
+                </button>
+                <button id="btn-submit" onclick="finishQuiz()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 sm:px-6 rounded-lg text-sm transition-all shadow-md active:scale-95">
+                    Submit Quiz
+                </button>
+                <button id="btn-restart" onclick="restartQuiz()" class="hidden bg-brandRed hover:bg-brandRedHover text-white font-bold py-2.5 px-5 sm:px-6 rounded-lg text-sm transition-all shadow-md">
+                    Try Again
+                </button>
+            </div>
+
+            <button id="btn-next" onclick="navigateQuestion(1)" class="bg-brandRed hover:bg-brandRedHover text-white font-bold py-2.5 px-4 sm:px-5 rounded-lg text-sm transition-all shadow-md disabled:opacity-40 disabled:cursor-not-allowed">
+                Next
+            </button>
+        </footer>
+    </main>
+
+    <footer class="text-center text-xs text-slate-400 mt-4">
+        &copy; Modal Verbs Learning Module &bull; B1 Level Grammar Practice
+    </footer>
+
+    <!-- Quiz Logic JavaScript -->
+    <script>
+        // 10 Contextualized B1 Questions focusing strictly on 6 modal verbs: can, could, should, must, may, might
+        const rawQuestionsData = [
+            {
+                id: 1,
+                context: "Office Workplace Dialogue",
+                text: "<strong>Sarah:</strong> I have a severe migraine and I can barely focus on this report.<br><strong>Mark:</strong> You look really pale. You ________ leave early and go see a doctor.",
+                correctModal: "should",
+                options: [
+                    { modal: "should" },
+                    { modal: "must" },
+                    { modal: "may" },
+                    { modal: "can" },
+                    { modal: "might" }
+                ],
+                explanation: "We use <strong>should</strong> to give advice or recommendations. In this context, Mark is advising Sarah to see a doctor because she feels sick. We do not use <strong>must</strong> because it is not an absolute obligation or law, and <strong>may</strong> or <strong>might</strong> express possibility rather than advice."
+            },
+            {
+                id: 2,
+                context: "Airport Security Notice",
+                text: "<strong>Notice:</strong> All airline passengers ________ show a valid passport and boarding pass before entering the departure terminal. No exceptions are allowed.",
+                correctModal: "must",
+                options: [
+                    { modal: "must" },
+                    { modal: "should" },
+                    { modal: "could" },
+                    { modal: "may" },
+                    { modal: "can" }
+                ],
+                explanation: "We use <strong>must</strong> to express strong obligation, formal rules, or mandatory requirements. Since security rules are strict regulations with no exceptions, <strong>must</strong> is required. <strong>Should</strong> is too weak (suggestion), and <strong>can</strong> or <strong>may</strong> indicate permission rather than compulsory rules."
+            },
+            {
+                id: 3,
+                context: "Weather Forecast Discussion",
+                text: "<strong>Paul:</strong> Are you taking an umbrella to the park?<br><strong>Emma:</strong> I'm not sure. Look at those dark clouds; it ________ rain later this afternoon.",
+                correctModal: "might",
+                options: [
+                    { modal: "might" },
+                    { modal: "must" },
+                    { modal: "should" },
+                    { modal: "can" },
+                    { modal: "could" }
+                ],
+                explanation: "We use <strong>might</strong> (or <strong>may</strong>) to talk about future uncertainty or potential possibilities. Emma is unsure about the weather. <strong>Must</strong> would indicate certainty (logical deduction), whereas <strong>might</strong> correctly conveys that rain is possible but not guaranteed."
+            },
+            {
+                id: 4,
+                context: "Job Interview Conversation",
+                text: "<strong>Interviewer:</strong> What languages can you speak fluently?<br><strong>Candidate:</strong> I speak English well, and when I lived in Rome, I ________ converse in Italian easily.",
+                correctModal: "could",
+                options: [
+                    { modal: "could" },
+                    { modal: "can" },
+                    { modal: "should" },
+                    { modal: "must" },
+                    { modal: "may" }
+                ],
+                explanation: "We use <strong>could</strong> as the past form of <strong>can</strong> to describe general abilities in the past ('when I lived in Rome'). <strong>Can</strong> is used for present ability, while <strong>should</strong> and <strong>must</strong> do not express ability."
+            },
+            {
+                id: 5,
+                context: "Formal Classroom Request",
+                text: "<strong>Student:</strong> Excuse me, Professor Davis. ________ I ask a quick question regarding the assignment deadline?",
+                correctModal: "may",
+                options: [
+                    { modal: "may" },
+                    { modal: "must" },
+                    { modal: "should" },
+                    { modal: "might" },
+                    { modal: "could" }
+                ],
+                explanation: "We use <strong>may</strong> to request permission in polite or formal contexts. While <strong>can</strong> or <strong>could</strong> can also be used informally, <strong>may</strong> is the most polite and grammatically standard choice when addressing a professor formally."
+            },
+            {
+                id: 6,
+                context: "Technical Skill Discussion",
+                text: "<strong>David:</strong> Do you need help designing the website banner?<br><strong>Lisa:</strong> No, thanks! I ________ use graphic software quite well myself.",
+                correctModal: "can",
+                options: [
+                    { modal: "can" },
+                    { modal: "should" },
+                    { modal: "must" },
+                    { modal: "might" },
+                    { modal: "could" }
+                ],
+                explanation: "We use <strong>can</strong> to express present ability or skill ('I am able to use graphic software'). <strong>Could</strong> refers to past ability or hypothetical scenarios, while <strong>should</strong> expresses advice."
+            },
+            {
+                id: 7,
+                context: "Deduction & Logical Reasoning",
+                text: "<strong>Tom:</strong> Look! The lights are on, and I hear music inside the house.<br><strong>Rachel:</strong> Alex ________ be inside. He never leaves the music playing when he goes out.",
+                correctModal: "must",
+                options: [
+                    { modal: "must" },
+                    { modal: "should" },
+                    { modal: "may" },
+                    { modal: "can" },
+                    { modal: "could" }
+                ],
+                explanation: "We use <strong>must</strong> for positive logical deduction when we are almost certain that something is true based on clear evidence (lights on, music playing). <strong>Should</strong> only implies expectation, and <strong>may</strong> implies doubt."
+            },
+            {
+                id: 8,
+                context: "Friendly Suggestion / Recommendation",
+                text: "<strong>Jessica:</strong> I've been feeling exhausted all week.<br><strong>Liam:</strong> You ________ take a weekend trip to relax. It would do you a lot of good.",
+                correctModal: "should",
+                options: [
+                    { modal: "should" },
+                    { modal: "must" },
+                    { modal: "can" },
+                    { modal: "may" },
+                    { modal: "might" }
+                ],
+                explanation: "We use <strong>should</strong> to offer friendly advice, opinions, or helpful suggestions. <strong>Must</strong> sounds too authoritarian or mandatory in a relaxed conversation between friends."
+            },
+            {
+                id: 9,
+                context: "Uncertain Weekend Plans",
+                text: "<strong>Ben:</strong> Are you attending the conference this Saturday?<br><strong>Claire:</strong> I ________ go if I finish my paper in time, but I haven't decided yet.",
+                correctModal: "may",
+                options: [
+                    { modal: "may" },
+                    { modal: "must" },
+                    { modal: "should" },
+                    { modal: "can" },
+                    { modal: "could" }
+                ],
+                explanation: "We use <strong>may</strong> (or <strong>might</strong>) to express genuine possibility depending on a condition ('if I finish my paper'). <strong>May</strong> indicates that the plan is possible, but not yet decided."
+            },
+            {
+                id: 10,
+                context: "Polite Past Request / Condition",
+                text: "<strong>Daniel:</strong> It was raining so heavily yesterday that we ________ not go on our scheduled hike.",
+                correctModal: "could",
+                options: [
+                    { modal: "could" },
+                    { modal: "should" },
+                    { modal: "must" },
+                    { modal: "may" },
+                    { modal: "can" }
+                ],
+                explanation: "We use <strong>could</strong> to talk about past ability or past possibility in specific circumstances. Here it expresses that the bad weather rendered them unable to go hiking."
+            }
+        ];
+
+        // State variables
+        let questions = [];
+        let currentIndex = 0;
+        let userAnswers = {}; // { questionId: selectedOptionLetter }
+        let checkedQuestions = {}; // { questionId: true/false }
+
+        // Fisher-Yates Shuffle Algorithm
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Initialize and randomize answers so correct options don't repeat letter patterns predictably
+        function initQuiz() {
+            const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+            let lastCorrectLetter = '';
+
+            questions = rawQuestionsData.map((q) => {
+                // Shuffle options
+                let shuffledOpts = shuffle([...q.options]);
+                
+                // Assign A, B, C, D, E
+                let formattedOptions = shuffledOpts.map((opt, idx) => ({
+                    letter: optionLetters[idx],
+                    modal: opt.modal
+                }));
+
+                // Find letter of correct answer
+                let correctOpt = formattedOptions.find(o => o.modal === q.correctModal);
+                
+                // If by chance the correct letter is identical to previous, swap to break consecutive pattern if possible
+                if (correctOpt.letter === lastCorrectLetter) {
+                    let otherIdx = formattedOptions.findIndex(o => o.modal !== q.correctModal);
+                    if (otherIdx !== -1) {
+                        // Swap modals
+                        let tempModal = correctOpt.modal;
+                        correctOpt.modal = formattedOptions[otherIdx].modal;
+                        formattedOptions[otherIdx].modal = tempModal;
+                        
+                        // Re-identify correct letter
+                        correctOpt = formattedOptions.find(o => o.modal === q.correctModal);
+                    }
+                }
+
+                lastCorrectLetter = correctOpt.letter;
+
+                return {
+                    ...q,
+                    options: formattedOptions,
+                    correctLetter: correctOpt.letter
+                };
+            });
+
+            currentIndex = 0;
+            userAnswers = {};
+            checkedQuestions = {};
+
+            renderNavigation();
+            loadQuestion(0);
+            updateFooterControls();
+        }
+
+        // Render question number buttons in top nav bar
+        function renderNavigation() {
+            const navContainer = document.getElementById('question-nav-container');
+            navContainer.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${idx}`;
+                btn.onclick = () => jumpToQuestion(idx);
+                btn.className = `w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center transition-all duration-200 border`;
+                btn.innerText = idx + 1;
+                navContainer.appendChild(btn);
+            });
+            updateNavStyles();
+        }
+
+        // Update styling of navigation buttons
+        function updateNavStyles() {
+            questions.forEach((q, idx) => {
+                const btn = document.getElementById(`nav-btn-${idx}`);
+                if (!btn) return;
+
+                const isCurrent = idx === currentIndex;
+                const isAnswered = userAnswers[q.id] !== undefined;
+                const isChecked = checkedQuestions[q.id];
+
+                if (isCurrent) {
+                    btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-extrabold text-xs sm:text-sm flex items-center justify-center transition-all duration-200 border-2 border-brandRed bg-brandRed text-white shadow-md ring-2 ring-red-200";
+                } else if (isChecked) {
+                    const isCorrect = userAnswers[q.id] === q.correctLetter;
+                    if (isCorrect) {
+                        btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center border bg-emerald-100 border-emerald-500 text-emerald-800";
+                    } else {
+                        btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center border bg-rose-100 border-rose-500 text-rose-800";
+                    }
+                } else if (isAnswered) {
+                    btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-bold text-xs sm:text-sm flex items-center justify-center border bg-slate-800 border-slate-900 text-white";
+                } else {
+                    btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-medium text-xs sm:text-sm flex items-center justify-center border border-slate-300 bg-white text-slate-700 hover:bg-slate-100";
+                }
+            });
+        }
+
+        // Load question content into card
+        function loadQuestion(index) {
+            currentIndex = index;
+            const q = questions[currentIndex];
+
+            // Status bar
+            document.getElementById('quiz-status-text').innerText = `Question ${currentIndex + 1} of ${questions.length}`;
+
+            // Context and Text
+            document.getElementById('question-context-title').innerText = q.context;
+            document.getElementById('question-text').innerHTML = q.text;
+
+            // Render 5 options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const selectedOption = userAnswers[q.id];
+            const isChecked = checkedQuestions[q.id];
+
+            q.options.forEach((opt) => {
+                const optBtn = document.createElement('button');
+                optBtn.onclick = () => selectOption(q.id, opt.letter);
+
+                let baseStyles = "w-full text-left p-3.5 sm:p-4 rounded-xl border-2 font-medium transition-all duration-200 flex items-center justify-between group";
+
+                if (isChecked) {
+                    optBtn.disabled = true;
+                    if (opt.letter === q.correctLetter) {
+                        baseStyles += " border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold";
+                    } else if (opt.letter === selectedOption && selectedOption !== q.correctLetter) {
+                        baseStyles += " border-rose-500 bg-rose-50 text-rose-900 font-semibold";
+                    } else {
+                        baseStyles += " border-slate-200 bg-slate-50 text-slate-400 opacity-60";
+                    }
+                } else if (selectedOption === opt.letter) {
+                    baseStyles += " border-brandRed bg-red-50 text-slate-900 shadow-sm";
+                } else {
+                    baseStyles += " border-slate-200 bg-white hover:border-slate-400 hover:bg-slate-50 text-slate-800";
+                }
+
+                optBtn.className = baseStyles;
+
+                optBtn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg text-xs font-bold flex items-center justify-center ${selectedOption === opt.letter && !isChecked ? 'bg-brandRed text-white' : (isChecked && opt.letter === q.correctLetter ? 'bg-emerald-600 text-white' : (isChecked && opt.letter === selectedOption ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'))}">
+                            ${opt.letter}
+                        </span>
+                        <span class="text-sm sm:text-base">${opt.modal}</span>
+                    </div>
+                    ${selectedOption === opt.letter && !isChecked ? '<span class="text-xs text-brandRed font-bold uppercase tracking-wider">Selected</span>' : ''}
+                `;
+
+                optionsContainer.appendChild(optBtn);
+            });
+
+            // Feedback box display
+            const feedbackContainer = document.getElementById('feedback-container');
+            const feedbackHeader = document.getElementById('feedback-header');
+            const feedbackText = document.getElementById('feedback-text');
+
+            if (isChecked) {
+                feedbackContainer.classList.remove('hidden');
+                const isCorrect = selectedOption === q.correctLetter;
+
+                if (isCorrect) {
+                    feedbackContainer.className = "p-4 rounded-xl border-2 border-emerald-400 bg-emerald-50 text-emerald-950 transition-all duration-300";
+                    feedbackHeader.className = "font-bold text-base mb-1 text-emerald-800 flex items-center gap-2";
+                    feedbackHeader.innerHTML = `
+                        <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        Correct! Excellent choice.
+                    `;
+                } else {
+                    feedbackContainer.className = "p-4 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-950 transition-all duration-300";
+                    feedbackHeader.className = "font-bold text-base mb-1 text-rose-800 flex items-center gap-2";
+                    feedbackHeader.innerHTML = `
+                        <svg class="w-5 h-5 text-rose-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                        Incorrect. The correct answer is Option (${q.correctLetter}): <strong>${q.correctModal}</strong>.
+                    `;
+                }
+
+                feedbackText.innerHTML = q.explanation;
+            } else {
+                feedbackContainer.classList.add('hidden');
+            }
+
+            updateNavStyles();
+            updateFooterControls();
+        }
+
+        // Option selected callback
+        function selectOption(questionId, letter) {
+            if (checkedQuestions[questionId]) return; // locked after check
+            userAnswers[questionId] = letter;
+            loadQuestion(currentIndex);
+        }
+
+        // Check Answer button click
+        function checkCurrentAnswer() {
+            const q = questions[currentIndex];
+            if (!userAnswers[q.id]) {
+                alert("Please select an answer before checking!");
+                return;
+            }
+
+            checkedQuestions[q.id] = true;
+            loadQuestion(currentIndex);
+        }
+
+        // Jump directly to question index
+        function jumpToQuestion(index) {
+            // Hide report if switching back
+            document.getElementById('report-card').classList.add('hidden');
+            document.getElementById('question-card').classList.remove('hidden');
+            loadQuestion(index);
+        }
+
+        // Previous / Next buttons
+        function navigateQuestion(direction) {
+            const newIndex = currentIndex + direction;
+            if (newIndex >= 0 && newIndex < questions.length) {
+                jumpToQuestion(newIndex);
+            }
+        }
+
+        // Update enable/disable states for footer buttons
+        function updateFooterControls() {
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnCheck = document.getElementById('btn-check');
+            const btnSubmit = document.getElementById('btn-submit');
+            const btnRestart = document.getElementById('btn-restart');
+
+            btnPrev.disabled = currentIndex === 0;
+            btnNext.disabled = currentIndex === questions.length - 1;
+
+            const q = questions[currentIndex];
+            const isChecked = checkedQuestions[q.id];
+
+            if (isChecked) {
+                btnCheck.classList.add('hidden');
+            } else {
+                btnCheck.classList.remove('hidden');
+            }
+
+            // Check if all questions are answered/checked to promote submission
+            const totalAnswered = Object.keys(userAnswers).length;
+            if (totalAnswered === questions.length) {
+                btnSubmit.classList.remove('hidden');
+            } else {
+                btnSubmit.classList.add('hidden');
+            }
+            btnRestart.classList.add('hidden');
+        }
+
+        // Generate final score & report
+        function finishQuiz() {
+            let correctCount = 0;
+
+            questions.forEach((q) => {
+                if (userAnswers[q.id] === q.correctLetter) {
+                    correctCount++;
+                }
+            });
+
+            const total = questions.length;
+            const incorrectCount = total - correctCount;
+            const percentage = Math.round((correctCount / total) * 100);
+            const scoreGrade = ((correctCount / total) * 10).toFixed(1); // Scale out of 10.0
+
+            // Hide Question view, Show Report view
+            document.getElementById('question-card').classList.add('hidden');
+            document.getElementById('report-card').classList.remove('hidden');
+
+            // Hide checking controls, display try again
+            document.getElementById('btn-check').classList.add('hidden');
+            document.getElementById('btn-submit').classList.add('hidden');
+            document.getElementById('btn-restart').classList.remove('hidden');
+
+            // Set Header status
+            document.getElementById('quiz-status-text').innerText = "Quiz Results Summary";
+
+            // Populate statistics
+            document.getElementById('final-grade').innerText = `${scoreGrade} / 10`;
+            document.getElementById('final-percentage').innerText = `${percentage}% Accuracy`;
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-incorrect').innerText = incorrectCount;
+            document.getElementById('stat-accuracy').innerText = `${percentage}%`;
+
+            // Populate Breakdown list
+            const breakdownList = document.getElementById('breakdown-list');
+            breakdownList.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const userChoice = userAnswers[q.id];
+                const isCorrect = userChoice === q.correctLetter;
+                const userModalText = q.options.find(o => o.letter === userChoice)?.modal || 'Not Answered';
+
+                const item = document.createElement('div');
+                item.className = `p-4 rounded-xl border ${isCorrect ? 'bg-emerald-50/60 border-emerald-200' : 'bg-rose-50/60 border-rose-200'} text-sm leading-relaxed`;
+
+                item.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold text-slate-800">Question ${idx + 1}: ${q.context}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold ${isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'}">
+                            ${isCorrect ? 'Correct (+1.0)' : 'Incorrect (0.0)'}
+                        </span>
+                    </div>
+                    <p class="text-slate-700 text-xs sm:text-sm mb-2">${q.text}</p>
+                    <div class="text-xs space-y-1 mb-2">
+                        <p class="${isCorrect ? 'text-emerald-800' : 'text-rose-800'}"><strong>Your Answer:</strong> Option (${userChoice || 'N/A'}) - <strong>${userModalText}</strong></p>
+                        ${!isCorrect ? `<p class="text-emerald-800"><strong>Correct Answer:</strong> Option (${q.correctLetter}) - <strong>${q.correctModal}</strong></p>` : ''}
+                    </div>
+                    <div class="text-xs text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200 mt-2">
+                        <strong>Explanation:</strong> ${q.explanation}
+                    </div>
+                `;
+
+                breakdownList.appendChild(item);
+            });
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            document.getElementById('report-card').classList.add('hidden');
+            document.getElementById('question-card').classList.remove('hidden');
+            initQuiz();
+        }
+
+        // Initialize quiz on window load
+        window.onload = function() {
+            initQuiz();
+        };
+    </script>
+</body>
+</html>
